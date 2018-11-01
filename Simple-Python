@@ -1,0 +1,11 @@
+#Use alpine 3.8 with python3.7
+FROM python:3.7-alpine3.8
+
+#Set workdir directory
+WORKDIR /app
+
+#Copy python app into container
+COPY something.py ./ 
+
+#Run python
+CMD ["python", "./something.py" ]
