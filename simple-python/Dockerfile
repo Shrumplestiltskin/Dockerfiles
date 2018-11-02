@@ -4,8 +4,11 @@ FROM python:3.7-alpine3.8
 #Set workdir directory
 WORKDIR /app
 
+#Set an env var, persists into OS
+ENV applesauce=taco
+
 #Copy python app into container
-COPY something.py ./ 
+COPY print-env.py ./ 
 
 #Run python
 CMD ["python", "./something.py" ]
