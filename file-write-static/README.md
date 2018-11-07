@@ -23,3 +23,8 @@ If you run the container with non-zero pid the application will return per prog.
 Error! Could not open file
 #echo $?
 255
+
+
+
+Good ref -
+https://embano1.github.io/post/scratch/
