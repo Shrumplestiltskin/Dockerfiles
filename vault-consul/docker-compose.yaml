@@ -1,0 +1,59 @@
+version: '3'
+
+services:
+  consul-agent-1: &consul-agent
+    image: consul:1.4.0
+    networks:
+      - vault-net
+    command: "agent -retry-join consul-server-bootstrap -client 0.0.0.0"
+
+  consul-agent-2:
+    <<: *consul-agent
+
+  consul-agent-3:
+    <<: *consul-agent
+
+  consul-server-1: &consul-server
+    <<: *consul-agent
+    command: "agent -server -retry-join consul-server-bootstrap -client 0.0.0.0"
+
+  consul-server-2:
+    <<: *consul-server
+
+  consul-server-bootstrap:
+    <<: *consul-agent
+    ports:
+      - "8400:8400"
+      - "8500:8500"
+      - "8600:8600"
+      - "8600:8600/udp"
+    command: "agent -server -bootstrap-expect 3 -ui -client 0.0.0.0"
+
+  vault-standby: &vault-standby
+    image: vault:0.11.5
+    cap_add:
+      - IPC_LOCK
+    networks:
+      - vault-net
+    environment:
+      - VAULT_ADDR=http://127.0.0.1:8200
+      - VAULT_API_ADDR=http://127.0.0.1:8200
+      - VAULT_LOCAL_CONFIG={"backend":{"consul":{"address":"http://consul-server-bootstrap:8500","path":"vault/"}},"listener":{"tcp":{"address":"0.0.0.0:8200","tls_disable":1}},"ui":false, "disable_mlock":false}
+    command: server
+    depends_on:
+      - consul-server-bootstrap
+
+  vault-standby-2:
+    <<: *vault-standby
+
+  vault-active:
+    <<: *vault-standby
+    ports:
+      - "8200:8200"
+    environment:
+      - VAULT_ADDR=http://127.0.0.1:8200
+      - VAULT_API_ADDR=http://127.0.0.1:8200
+      - VAULT_LOCAL_CONFIG={"backend":{"consul":{"address":"http://consul-server-bootstrap:8500","path":"vault/"}},"listener":{"tcp":{"address":"0.0.0.0:8200","tls_disable":1}},"ui":true, "disable_mlock":false}
+
+networks:
+  vault-net:
