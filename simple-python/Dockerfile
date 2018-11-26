@@ -11,4 +11,4 @@ ENV applesauce=taco
 COPY print-env.py ./ 
 
 #Run python
-CMD ["python", "./something.py" ]
+CMD ["python", "./print-env.py" ]
