@@ -3,6 +3,7 @@ version: '3'
 services:
   consul-agent-1: &consul-agent
     image: consul:1.4.0
+    restart: unless-stopped
     networks:
       - vault-net
     command: "agent -retry-join consul-server-bootstrap -client 0.0.0.0"
@@ -31,6 +32,7 @@ services:
 
   vault-standby: &vault-standby
     image: vault:0.11.5
+    restart: unless-stopped
     cap_add:
       - IPC_LOCK
     networks:
