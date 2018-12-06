@@ -1,4 +1,5 @@
-Basic vault / consul docker-compose   
+Basic vault / consul docker-compose    
+Child dirs have some vault examples      
 
 6 node consul   
 3 vault instances   
