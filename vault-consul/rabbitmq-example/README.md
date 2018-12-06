@@ -6,6 +6,9 @@ https://www.vaultproject.io/docs/auth/approle.html
 https://www.vaultproject.io/api/auth/approle/index.html   
 https://www.vaultproject.io/api/secret/rabbitmq/index.html   
 
+#Start rabbit instance   
+docker run --restart=unless-stopped -p15672:15672 -p5672:5672 -d rabbitmq:3.7-management-alpine   
+
 #Enable rabbitmq secrets engine   
 ./vault secrets enable rabbitmq    
 
