@@ -11,7 +11,6 @@ RUN add-apt-repository \
    "deb [arch=amd64] https://download.docker.com/linux/debian \
    $(lsb_release -cs) \
    stable"
-RUN apt-get update && apt-get install -y \
-   docker-ce=5:18.09.0~3-0~debian-stretch
+RUN apt-get update && apt-get install -y docker-ce docker-ce-cli containerd.io
 RUN usermod -a -G docker jenkins
 USER jenkins
